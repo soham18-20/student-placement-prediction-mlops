@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Placement Prediction System | MLOps & DevOps</title>
+  <meta name="description" content="AI-powered Student Campus Placement Predictor with automated MLOps retraining, Docker, CI/CD pipeline, and data drift monitoring." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="dark-theme">
+  <!-- Background Glow Accents -->
+  <div class="blob blob-purple"></div>
+  <div class="blob blob-cyan"></div>
+  <div class="blob blob-emerald"></div>
+
+  <!-- Header Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-badge">
+          <span class="logo-icon">🎓</span>
+        </div>
+        <div>
+          <h1 class="logo-title">PlacementPulse <span class="tag-mlops">MLOps v1.2</span></h1>
+          <p class="logo-subtitle">Agile Software Development & DevOps Lab Project</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <div class="status-pill status-online" id="system-status-pill">
+          <span class="status-dot"></span>
+          <span id="system-status-text">API: Connecting...</span>
+        </div>
+        <a href="/docs" target="_blank" class="nav-link-btn" title="Open Swagger Documentation">
+          <span>Swagger API</span>
+          <span class="external-icon">↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="main-tabs">
+    <div class="tabs-container">
+      <button class="tab-btn active" id="tab-btn-predictor" data-tab="predictor-view">
+        <span class="tab-icon">🎯</span> Placement Predictor
+      </button>
+      <button class="tab-btn" id="tab-btn-mlops" data-tab="mlops-view">
+        <span class="tab-icon">⚙️</span> MLOps & Retraining
+      </button>
+      <button class="tab-btn" id="tab-btn-batch" data-tab="batch-view">
+        <span class="tab-icon">📊</span> Batch Cohort Testing
+      </button>
+      <button class="tab-btn" id="tab-btn-devops" data-tab="devops-view">
+        <span class="tab-icon">🚀</span> CI/CD & Pipeline
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="content-wrapper">
+
+    <!-- VIEW 1: PREDICTOR -->
+    <section id="predictor-view" class="tab-pane active">
+      <div class="dashboard-grid">
+        
+        <!-- Input Form Panel -->
+        <div class="glass-card panel-form">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Student Profile Parameters</h2>
+              <p class="card-desc">Adjust academic, technical, and extracurricular metrics</p>
+            </div>
+            <!-- Preset Buttons -->
+            <div class="preset-dropdown-group">
+              <span class="preset-label">Quick Presets:</span>
+              <div class="preset-buttons">
+                <button type="button" class="preset-btn" id="btn-preset-high" title="Preload Top Performer">🌟 High Achiever</button>
+                <button type="button" class="preset-btn" id="btn-preset-borderline" title="Preload Average Student">⚖️ Borderline</button>
+                <button type="button" class="preset-btn" id="btn-preset-risk" title="Preload At-Risk Student">⚠️ At Risk</button>
+              </div>
+            </div>
+          </div>
+
+          <form id="prediction-form" class="inputs-form">
+            <!-- CGPA -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="input-cgpa">
+                  <span class="field-icon">📘</span> Cumulative GPA (CGPA)
+                  <span class="range-hint">(0.0 - 10.0)</span>
+                </label>
+                <span class="val-pill" id="val-cgpa">8.20</span>
+              </div>
+              <input type="range" id="input-cgpa" name="cgpa" min="5.0" max="10.0" step="0.1" value="8.2" class="styled-slider" />
+              <div class="slider-ticks"><span>5.0</span><span>6.5</span><span>8.0</span><span>10.0</span></div>
+            </div>
+
+            <!-- Technical Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="input-tech">
+                  <span class="field-icon">💻</span> Technical Skills Score
+                  <span class="range-hint">(DSA, Coding, Web/Cloud)</span>
+                </label>
+                <span class="val-pill" id="val-tech">82 / 100</span>
+              </div>
+              <input type="range" id="input-tech" name="technical_score" min="30" max="100" step="1" value="82" class="styled-slider" />
+              <div class="slider-ticks"><span>30</span><span>55</span><span>75</span><span>100</span></div>
+            </div>
+
+            <!-- Aptitude Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="input-aptitude">
+                  <span class="field-icon">🧠</span> Aptitude & Reasoning Score
+                  <span class="range-hint">(Quantitative, Logic)</span>
+                </label>
+                <span class="val-pill" id="val-aptitude">76 / 100</span>
+              </div>
+              <input type="range" id="input-aptitude" name="aptitude_score" min="30" max="100" step="1" value="76" class="styled-slider" />
+              <div class="slider-ticks"><span>30</span><span>55</span><span>75</span><span>100</span></div>
+            </div>
+
+            <!-- Communication Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="input-comm">
+                  <span class="field-icon">🗣️</span> Communication & Soft Skills
+                  <span class="range-hint">(Verbal, Presentation)</span>
+                </label>
+                <span class="val-pill" id="val-comm">78 / 100</span>
+              </div>
+              <input type="range" id="input-comm" name="communication_score" min="30" max="100" step="1" value="78" class="styled-slider" />
+              <div class="slider-ticks"><span>30</span><span>55</span><span>75</span><span>100</span></div>
+            </div>
+
+            <!-- Dual Columns for Numeric Counts -->
+            <div class="row-two-col">
+              <!-- Internships -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label for="input-internships">
+                    <span class="field-icon">💼</span> Internships
+                  </label>
+                  <span class="val-pill" id="val-internships">2</span>
+                </div>
+                <input type="number" id="input-internships" name="internships" min="0" max="6" value="2" class="styled-number-input" />
+              </div>
+
+              <!-- Projects -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label for="input-projects">
+                    <span class="field-icon">🚀</span> Projects
+                  </label>
+                  <span class="val-pill" id="val-projects">3</span>
+                </div>
+                <input type="number" id="input-projects" name="projects" min="0" max="12" value="3" class="styled-number-input" />
+              </div>
+            </div>
+
+            <!-- Attendance -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="input-attendance">
+                  <span class="field-icon">📅</span> College Attendance
+                  <span class="range-hint">(Eligibility Threshold: 75%)</span>
+                </label>
+                <span class="val-pill" id="val-attendance">88.0%</span>
+              </div>
+              <input type="range" id="input-attendance" name="attendance" min="50" max="100" step="0.5" value="88.0" class="styled-slider" />
+              <div class="slider-ticks"><span>50%</span><span>75% (Min)</span><span>90%</span><span>100%</span></div>
+            </div>
+
+            <!-- Action CTA -->
+            <button type="submit" id="btn-submit-predict" class="btn-primary-glow">
+              <span class="btn-text">Predict Placement Likelihood</span>
+              <span class="btn-arrow">→</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Prediction Result Panel -->
+        <div class="glass-card panel-results">
+          <div class="card-header">
+            <h2 class="card-title">Placement Inference Analysis</h2>
+            <span class="badge-pill badge-neutral" id="model-version-tag">Model: v1.2.0</span>
+          </div>
+
+          <!-- Gauge and Verdict -->
+          <div class="verdict-hero">
+            <!-- Probability Circular Gauge -->
+            <div class="gauge-wrapper">
+              <svg class="gauge-svg" viewBox="0 0 160 160">
+                <circle class="gauge-bg" cx="80" cy="80" r="68"></circle>
+                <circle class="gauge-progress" id="gauge-circle" cx="80" cy="80" r="68"></circle>
+              </svg>
+              <div class="gauge-center-text">
+                <span class="gauge-percent" id="result-percent">86.4%</span>
+                <span class="gauge-caption">Probability</span>
+              </div>
+            </div>
+
+            <!-- Verdict Text -->
+            <div class="verdict-details">
+              <div class="prediction-badge badge-likely" id="result-badge">
+                <span class="verdict-icon" id="result-icon">✓</span>
+                <span class="verdict-label" id="result-prediction">Likely to be Placed</span>
+              </div>
+              <div class="confidence-row">
+                <span class="meta-label">Confidence:</span>
+                <span class="confidence-val" id="result-confidence">High Confidence (94% Model Acc)</span>
+              </div>
+              <p class="verdict-subtext" id="result-summary">
+                The student demonstrates strong core competencies exceeding standard campus recruitment benchmarks.
+              </p>
+            </div>
+          </div>
+
+          <!-- Profile Skills Breakdown Bar Chart -->
+          <div class="skills-breakdown">
+            <h3 class="section-heading">Student Competency Benchmark</h3>
+            <div class="metric-bar-group">
+              <div class="bar-info">
+                <span>Academic Standing (CGPA)</span>
+                <span id="bar-val-cgpa">82%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill" id="bar-fill-cgpa" style="width: 82%;"></div></div>
+            </div>
+            <div class="metric-bar-group">
+              <div class="bar-info">
+                <span>Technical & Problem Solving</span>
+                <span id="bar-val-tech">82%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill bar-fill-accent" id="bar-fill-tech" style="width: 82%;"></div></div>
+            </div>
+            <div class="metric-bar-group">
+              <div class="bar-info">
+                <span>Aptitude & Logical Reasoning</span>
+                <span id="bar-val-apt">76%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill bar-fill-indigo" id="bar-fill-apt" style="width: 76%;"></div></div>
+            </div>
+            <div class="metric-bar-group">
+              <div class="bar-info">
+                <span>Communication & Soft Skills</span>
+                <span id="bar-val-comm">78%</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill bar-fill-teal" id="bar-fill-comm" style="width: 78%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Actionable Recommendations & Key Factors -->
+          <div class="insights-container">
+            <div class="insight-block">
+              <h4 class="insight-title"><span class="icon">💡</span> Personalized Recommendations</h4>
+              <ul class="recommendation-list" id="recommendation-list">
+                <li>Maintain CGPA above 8.0 for tier-1 company shortlisting.</li>
+                <li>Engage in open-source projects or hackathons to reinforce practical portfolio.</li>
+              </ul>
+            </div>
+            <div class="insight-block">
+              <h4 class="insight-title"><span class="icon">🔑</span> Key Driving Factors</h4>
+              <ul class="factors-list" id="factors-list">
+                <li>High technical skills score provides substantial leverage.</li>
+                <li>Multiple internships demonstrate corporate readiness.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: MLOPS & RETRAINING -->
+    <section id="mlops-view" class="tab-pane">
+      <div class="mlops-grid">
+        <!-- Top KPI Cards -->
+        <div class="kpi-card glass-card">
+          <span class="kpi-icon">🎯</span>
+          <div class="kpi-content">
+            <span class="kpi-label">Model Accuracy</span>
+            <span class="kpi-val" id="mlops-acc">94.0%</span>
+            <span class="kpi-sub">Holdout Test Set</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card">
+          <span class="kpi-icon">⚡</span>
+          <div class="kpi-content">
+            <span class="kpi-label">F1-Score</span>
+            <span class="kpi-val" id="mlops-f1">0.9659</span>
+            <span class="kpi-sub">Precision-Recall Balance</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card">
+          <span class="kpi-icon">📈</span>
+          <div class="kpi-content">
+            <span class="kpi-label">ROC-AUC Score</span>
+            <span class="kpi-val" id="mlops-auc">0.9748</span>
+            <span class="kpi-sub">Discrimination Ability</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card">
+          <span class="kpi-icon">🛡️</span>
+          <div class="kpi-content">
+            <span class="kpi-label">Data Drift Status</span>
+            <span class="kpi-val text-success" id="mlops-drift-status">HEALTHY</span>
+            <span class="kpi-sub" id="mlops-drift-sub">Baseline Synchronized</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retraining Pipeline Controls -->
+      <div class="mlops-details-grid">
+        <!-- Left: Automated Retrain Trigger -->
+        <div class="glass-card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Continuous Training (CT) Pipeline</h3>
+              <p class="card-desc">Trigger automated retraining with fresh student data and zero downtime hot-reload</p>
+            </div>
+          </div>
+          
+          <div class="retrain-action-box">
+            <p class="box-desc">
+              When new placement records or semester performance updates arrive, the MLOps pipeline re-fits the RandomForest classifier, recalculates validation metrics, and updates the production model artifact if the F1 score meets criteria.
+            </p>
+            <div class="button-row">
+              <button id="btn-trigger-retrain" class="btn-retrain">
+                <span class="retrain-spin" id="retrain-spinner" style="display:none;">⏳</span>
+                <span id="retrain-btn-text">Trigger Automated Retraining</span>
+              </button>
+            </div>
+            <div id="retrain-status-msg" class="retrain-msg" style="display:none;"></div>
+          </div>
+
+          <!-- Feature Importance List -->
+          <div class="feature-importance-box">
+            <h4 class="box-subtitle">Feature Importance Weights (Gini Impurity)</h4>
+            <div id="feature-importance-bars" class="importance-bars">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Telemetry & Confusion Matrix -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h3 class="card-title">Confusion Matrix & Production Telemetry</h3>
+            <p class="card-desc">Evaluation on holdout test set (300 student records)</p>
+          </div>
+
+          <div class="confusion-matrix-wrapper">
+            <table class="cm-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Predicted: Unlikely</th>
+                  <th>Predicted: Likely</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cm-header-cell">Actual: Unlikely</td>
+                  <td class="cm-cell cm-tn" id="cm-tn">TN: 27</td>
+                  <td class="cm-cell cm-fp" id="cm-fp">FP: 11</td>
+                </tr>
+                <tr>
+                  <td class="cm-header-cell">Actual: Likely</td>
+                  <td class="cm-cell cm-fn" id="cm-fn">FN: 7</td>
+                  <td class="cm-cell cm-tp" id="cm-tp">TP: 255</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="telemetry-stats">
+            <div class="telemetry-item">
+              <span class="telemetry-label">Active Model Version:</span>
+              <span class="telemetry-val font-mono" id="tel-version">v1.2.0</span>
+            </div>
+            <div class="telemetry-item">
+              <span class="telemetry-label">Total Predictions Served:</span>
+              <span class="telemetry-val font-mono" id="tel-total">0</span>
+            </div>
+            <div class="telemetry-item">
+              <span class="telemetry-label">Avg Inference Latency:</span>
+              <span class="telemetry-val font-mono" id="tel-latency">0.002s</span>
+            </div>
+            <div class="telemetry-item">
+              <span class="telemetry-label">Last Retrain Timestamp:</span>
+              <span class="telemetry-val font-mono" id="tel-timestamp">Loaded</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: BATCH TESTING -->
+    <section id="batch-view" class="tab-pane">
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Batch Student Cohort Evaluation</h2>
+            <p class="card-desc">Simulate batch inferences for department placement drives</p>
+          </div>
+          <button id="btn-load-sample-cohort" class="btn-secondary">Load Sample Cohort (10 Students)</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="batch-table">
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>CGPA</th>
+                <th>Tech Score</th>
+                <th>Aptitude</th>
+                <th>Comm</th>
+                <th>Internships</th>
+                <th>Projects</th>
+                <th>Attendance</th>
+                <th>Prediction</th>
+                <th>Probability</th>
+              </tr>
+            </thead>
+            <tbody id="batch-tbody">
+              <tr>
+                <td colspan="10" class="empty-table-msg">Click "Load Sample Cohort" to run multi-student batch inference through <code>/api/v1/predict/batch</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: DEVOPS & CI/CD PIPELINE -->
+    <section id="devops-view" class="tab-pane">
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">DevOps & MLOps Architecture Pipeline</h2>
+            <p class="card-desc">End-to-end continuous integration, continuous delivery, and model lifecycle</p>
+          </div>
+          <span class="badge-pill badge-primary">Agile Lab Submission</span>
+        </div>
+
+        <!-- Architecture Flow Cards -->
+        <div class="pipeline-flow-container">
+          <!-- Step 1 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">01</div>
+            <h4 class="step-title">Data Ingestion</h4>
+            <p class="step-desc">Raw student placement dataset (1,500 samples), schema validation, split into train/test.</p>
+            <span class="step-tech">Pandas / NumPy</span>
+          </div>
+
+          <div class="pipeline-arrow">➔</div>
+
+          <!-- Step 2 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">02</div>
+            <h4 class="step-title">ML Training & Versioning</h4>
+            <p class="step-desc">RandomForestClassifier, StandardScaler, hyperparameter tuning, metrics export to JSON.</p>
+            <span class="step-tech">Scikit-learn / Joblib</span>
+          </div>
+
+          <div class="pipeline-arrow">➔</div>
+
+          <!-- Step 3 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">03</div>
+            <h4 class="step-title">FastAPI Backend</h4>
+            <p class="step-desc">High-performance async REST API with Pydantic validation, CORS, and Swagger UI.</p>
+            <span class="step-tech">FastAPI / Uvicorn</span>
+          </div>
+
+          <div class="pipeline-arrow">➔</div>
+
+          <!-- Step 4 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">04</div>
+            <h4 class="step-title">CI Pipeline</h4>
+            <p class="step-desc">GitHub Actions automated workflow executing Flake8 linting and Pytest unit test suites.</p>
+            <span class="step-tech">GitHub Actions / Pytest</span>
+          </div>
+
+          <div class="pipeline-arrow">➔</div>
+
+          <!-- Step 5 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">05</div>
+            <h4 class="step-title">Containerization</h4>
+            <p class="step-desc">Docker container packaging Python 3.11, pre-trained model artifacts, and web server.</p>
+            <span class="step-tech">Docker / Docker Hub</span>
+          </div>
+
+          <div class="pipeline-arrow">➔</div>
+
+          <!-- Step 6 -->
+          <div class="pipeline-step-card">
+            <div class="step-num">06</div>
+            <h4 class="step-title">CD & Drift Monitoring</h4>
+            <p class="step-desc">Continuous deployment to server/cloud with live latency tracking and statistical drift monitoring.</p>
+            <span class="step-tech">Continuous Training / Health</span>
+          </div>
+        </div>
+
+        <!-- Viva Voce Quick Cheat Sheet Inside UI -->
+        <div class="viva-quick-box">
+          <h3 class="viva-title">🎓 Viva Voce Key Talking Points for Lab Examination</h3>
+          <div class="viva-grid">
+            <div class="viva-card">
+              <h5>1. Why RandomForest for Placement?</h5>
+              <p>RandomForest handles non-linear interactions (e.g. high CGPA compensating for moderate aptitude), prevents overfitting via bagging, and outputs interpretable feature importances.</p>
+            </div>
+            <div class="viva-card">
+              <h5>2. How is MLOps different from standard DevOps?</h5>
+              <p>DevOps focuses on code and binary deployment (CI/CD). MLOps adds <strong>Data Drift</strong>, <strong>Model Versioning</strong>, <strong>Continuous Training (CT)</strong>, and <strong>Model Performance Monitoring</strong>.</p>
+            </div>
+            <div class="viva-card">
+              <h5>3. What does your CI pipeline verify?</h5>
+              <p>Our GitHub Actions workflow checks code style (Flake8), runs 15 automated Pytest unit tests (data validation, model inferences, HTTP status codes), and builds the Docker image.</p>
+            </div>
+            <div class="viva-card">
+              <h5>4. How do you handle Data Drift?</h5>
+              <p>The system stores baseline training feature statistics (means & standard deviations). During inference, incoming requests are monitored; if Z-shift exceeds 1.25, drift is flagged to trigger retraining.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>© 2026 Student Placement Prediction System | Agile Software Development + DevOps Mini Project</p>
+      <div class="footer-tags">
+        <span>FastAPI</span> • <span>Scikit-Learn</span> • <span>Docker</span> • <span>GitHub Actions CI/CD</span> • <span>MLOps</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
