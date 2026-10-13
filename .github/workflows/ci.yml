@@ -32,7 +32,7 @@ jobs:
 
       - name: Code Quality & Linting (Ruff)
         run: |
-          ruff check .
+          python -m ruff check .
 
       - name: Run Pytest Test Suite
         run: |
