@@ -1,0 +1,97 @@
+{
+  "model_version": "v1.0.0",
+  "algorithm": "RandomForestClassifier (scikit-learn Pipeline)",
+  "pipeline_steps": [
+    "StandardScaler",
+    "RandomForestClassifier"
+  ],
+  "training_timestamp": "2026-10-12T18:00:11.006320+00:00",
+  "random_state": 42,
+  "split": {
+    "test_size": 0.2,
+    "train_samples": 1200,
+    "test_samples": 300,
+    "stratified": true
+  },
+  "features": [
+    "cgpa",
+    "technical_score",
+    "aptitude_score",
+    "communication_score",
+    "internship_exp",
+    "projects_completed",
+    "attendance"
+  ],
+  "dataset": {
+    "dataset_path": "C:\\Users\\lenovo\\.gemini\\antigravity-ide\\scratch\\student-placement-mlops\\data\\raw\\student_placement_data.csv",
+    "total_records": 1500,
+    "is_synthetic": true,
+    "demo_mode_label": "Synthetic Educational Simulation Data",
+    "disclosure": "DEMO MODE NOTICE: Trained on synthetic educational simulation data for Agile and DevOps Lab demonstrations. Predictions are algorithmic estimations based on domain rules and do not represent guaranteed real-world placement outcomes.",
+    "class_balance": {
+      "unlikely_count": 333,
+      "likely_count": 1167,
+      "placement_rate": 0.778
+    }
+  },
+  "primary_metrics": {
+    "accuracy": 0.9367,
+    "precision": 0.9385,
+    "recall": 0.9828,
+    "f1_score": 0.9602,
+    "confusion_matrix": {
+      "true_negatives": 52,
+      "false_positives": 15,
+      "false_negatives": 4,
+      "true_positives": 229
+    },
+    "roc_auc": 0.9787
+  },
+  "baseline_comparison": {
+    "dummy_majority_class": {
+      "name": "DummyClassifier (Most Frequent)",
+      "metrics": {
+        "accuracy": 0.7767,
+        "precision": 0.7767,
+        "recall": 1.0,
+        "f1_score": 0.8743,
+        "confusion_matrix": {
+          "true_negatives": 0,
+          "false_positives": 67,
+          "false_negatives": 0,
+          "true_positives": 233
+        },
+        "roc_auc": null
+      },
+      "accuracy_delta": 0.16,
+      "f1_delta": 0.0859
+    },
+    "logistic_regression": {
+      "name": "Standard Logistic Regression",
+      "metrics": {
+        "accuracy": 0.9567,
+        "precision": 0.9741,
+        "recall": 0.97,
+        "f1_score": 0.972,
+        "confusion_matrix": {
+          "true_negatives": 61,
+          "false_positives": 6,
+          "false_negatives": 7,
+          "true_positives": 226
+        },
+        "roc_auc": 0.9941
+      },
+      "accuracy_delta": -0.02,
+      "f1_delta": -0.0118
+    }
+  },
+  "feature_importances": {
+    "cgpa": 0.568,
+    "technical_score": 0.1687,
+    "internship_exp": 0.0723,
+    "communication_score": 0.0652,
+    "aptitude_score": 0.0474,
+    "projects_completed": 0.0451,
+    "attendance": 0.0333
+  }
+}

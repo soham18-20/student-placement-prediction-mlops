@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Placement Prediction System with MLOps | Agile ASD & DevOps Lab</title>
+  <meta name="description" content="Minimalist, responsive student campus placement prediction analytics dashboard with scikit-learn pipeline, Flask REST API, baseline comparisons, and MLOps observability." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/minimalist.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand-wrapper">
+        <div class="brand-icon">🎓</div>
+        <div>
+          <h1 class="app-title">
+            Student Placement Prediction System
+            <span class="badge-tag">MLOps & ASD Lab</span>
+          </h1>
+          <p class="app-subtitle">Agile Software Development and DevOps Lab Mini Project</p>
+        </div>
+      </div>
+      <div class="header-status-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="api-status-text">API: Checking...</span>
+      </div>
+    </header>
+
+    <!-- Synthetic Demo Mode Disclosure Banner -->
+    <div class="demo-banner" id="demo-banner">
+      <div class="demo-banner-content">
+        <span class="demo-badge">Synthetic Demo Mode</span>
+        <span>Notice: Model is trained on synthetic educational simulation data for DevOps Lab demonstration. Predictions are algorithmic estimates and not certified real-world placement guarantees.</span>
+      </div>
+    </div>
+
+    <!-- Error Alert Box -->
+    <div class="error-alert" id="error-alert" role="alert">
+      <strong>Please correct the following input errors:</strong>
+      <ul class="error-list" id="error-list"></ul>
+    </div>
+
+    <!-- Main Interactive Grid -->
+    <main class="main-grid">
+      <!-- Input Parameters Card -->
+      <section class="card" aria-labelledby="form-heading">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title" id="form-heading">Student Academic & Technical Profile</h2>
+            <p class="card-subtitle">Input student credentials to evaluate campus placement probability</p>
+          </div>
+        </div>
+
+        <!-- Quick Presets for Demo -->
+        <div class="preset-bar">
+          <span class="preset-label">Quick Presets:</span>
+          <button type="button" class="preset-btn" data-preset="top">Top Performer</button>
+          <button type="button" class="preset-btn" data-preset="borderline">Borderline Student</button>
+          <button type="button" class="preset-btn" data-preset="atrisk">Needs Improvement</button>
+        </div>
+
+        <form id="prediction-form" novalidate>
+          <div class="form-grid">
+            <!-- 1. CGPA -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="cgpa">CGPA</label>
+                <span class="input-hint">0.0 – 10.0</span>
+              </div>
+              <input type="number" id="cgpa" class="input-field" step="0.01" min="0" max="10" placeholder="e.g. 8.2" required value="8.2" />
+            </div>
+
+            <!-- 2. Technical Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="technical_score">Technical Skills Score</label>
+                <span class="input-hint">0 – 100</span>
+              </div>
+              <input type="number" id="technical_score" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 80.0" required value="80.0" />
+            </div>
+
+            <!-- 3. Aptitude Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="aptitude_score">Aptitude & Reasoning</label>
+                <span class="input-hint">0 – 100</span>
+              </div>
+              <input type="number" id="aptitude_score" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 75.0" required value="75.0" />
+            </div>
+
+            <!-- 4. Communication Score -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="communication_score">Communication Score</label>
+                <span class="input-hint">0 – 100</span>
+              </div>
+              <input type="number" id="communication_score" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 78.0" required value="78.0" />
+            </div>
+
+            <!-- 5. Internship Experience (Yes/No Pill) -->
+            <div class="form-group">
+              <div class="label-row">
+                <label>Internship Experience</label>
+                <span class="input-hint">Yes / No</span>
+              </div>
+              <input type="hidden" id="internship-val" value="yes" />
+              <div class="pill-radio-group" role="radiogroup" aria-label="Internship Experience">
+                <div class="pill-option intern-pill active" data-value="yes" tabindex="0" role="radio" aria-checked="true">Yes</div>
+                <div class="pill-option intern-pill" data-value="no" tabindex="0" role="radio" aria-checked="false">No</div>
+              </div>
+            </div>
+
+            <!-- 6. Projects Completed -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="projects_completed">Projects Completed</label>
+                <span class="input-hint">Integer &ge; 0</span>
+              </div>
+              <input type="number" id="projects_completed" class="input-field" min="0" max="50" step="1" placeholder="e.g. 3" required value="3" />
+            </div>
+
+            <!-- 7. Attendance Percentage -->
+            <div class="form-group form-group-full">
+              <div class="label-row">
+                <label for="attendance">Attendance Percentage</label>
+                <span class="input-hint">0 – 100%</span>
+              </div>
+              <input type="number" id="attendance" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 88.0" required value="88.0" />
+            </div>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn-submit">
+            <span>Analyze Placement Probability</span>
+            <span>&rarr;</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Prediction Analytics Outcome Card -->
+      <section class="card result-card" aria-labelledby="results-heading">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title" id="results-heading">Prediction Outcome & Insights</h2>
+            <p class="card-subtitle">Algorithmic classification generated by scikit-learn pipeline</p>
+          </div>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div class="result-placeholder" id="result-placeholder">
+          <div class="placeholder-icon">⚡</div>
+          <p><strong>Awaiting Analysis</strong></p>
+          <p style="font-size: 13px; margin-top: 4px;">Adjust parameters or choose a preset and submit the form to see placement predictions.</p>
+        </div>
+
+        <!-- Populated Prediction Result -->
+        <div class="result-display" id="result-display">
+          <!-- Placement Outcome Banner -->
+          <div class="outcome-banner likely" id="outcome-banner">
+            <div>
+              <div class="outcome-title">Placement Status</div>
+              <div class="outcome-status" id="outcome-status-text">Likely Placed</div>
+            </div>
+            <div class="confidence-tag" id="confidence-tag">High Confidence</div>
+          </div>
+
+          <!-- Probability Meter -->
+          <div class="probability-box">
+            <div class="prob-header">
+              <span class="prob-title">Estimated Placement Likelihood</span>
+              <span class="prob-number" id="prob-val">87.5%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill fill-likely" id="progress-fill" style="width: 87.5%;"></div>
+            </div>
+          </div>
+
+          <!-- Key Drivers -->
+          <div>
+            <h3 class="section-subtitle">Academic & Profile Drivers</h3>
+            <div class="factor-tags" id="factors-list"></div>
+          </div>
+
+          <!-- Mentorship Recommendations -->
+          <div>
+            <h3 class="section-subtitle">Actionable Career Mentorship</h3>
+            <div class="recommendations-list" id="recs-list"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Model Observability & Baseline Comparison Section -->
+    <section class="analytics-section" aria-labelledby="analytics-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="analytics-heading">Model Performance & Baseline Observability</h2>
+        <p class="card-subtitle">Transparent evaluation metrics, confusion matrix, and baseline comparison on holdout test data</p>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="analytics-grid">
+        <div class="stat-box">
+          <div class="stat-label">Model Accuracy</div>
+          <div class="stat-value" id="stat-accuracy">--</div>
+          <div class="stat-desc">Holdout test split</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">F1-Score (Balanced)</div>
+          <div class="stat-value" id="stat-f1">--</div>
+          <div class="stat-desc">Harmonic precision/recall</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Sensitivity / Recall</div>
+          <div class="stat-value" id="stat-recall">--</div>
+          <div class="stat-desc">Placement capture rate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">ROC-AUC Score</div>
+          <div class="stat-value" id="stat-roc">--</div>
+          <div class="stat-desc">Separability power</div>
+        </div>
+      </div>
+
+      <!-- Comparison Table & Confusion Matrix Grid -->
+      <div class="detail-grid">
+        <!-- Baseline Comparison Table -->
+        <div class="card">
+          <h3 class="card-title">Baseline Comparison</h3>
+          <p class="card-subtitle" style="margin-bottom: 12px;">Validates model effectiveness against naïve and standard baselines</p>
+          <div class="table-wrapper">
+            <table class="minimal-table">
+              <thead>
+                <tr>
+                  <th>Model / Baseline</th>
+                  <th>Accuracy</th>
+                  <th>F1-Score</th>
+                  <th>Acc Delta</th>
+                </tr>
+              </thead>
+              <tbody id="baseline-tbody">
+                <tr>
+                  <td colspan="4" style="text-align: center; color: var(--text-muted);">Loading baseline benchmarks...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Confusion Matrix -->
+        <div class="card">
+          <h3 class="card-title">Test Set Confusion Matrix</h3>
+          <p class="card-subtitle" style="margin-bottom: 12px;">Classification breakdown on unseen holdout test split (20%)</p>
+          <div class="cm-grid">
+            <div class="cm-cell">
+              <div class="cm-title">True Negatives (TN)</div>
+              <div class="cm-count cm-tn" id="cm-tn">--</div>
+              <div class="stat-desc" style="color: var(--text-muted);">Correctly Unlikely</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-title">False Positives (FP)</div>
+              <div class="cm-count cm-fp" id="cm-fp">--</div>
+              <div class="stat-desc" style="color: var(--text-muted);">Type I Error</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-title">False Negatives (FN)</div>
+              <div class="cm-count cm-fn" id="cm-fn">--</div>
+              <div class="stat-desc" style="color: var(--text-muted);">Type II Error</div>
+            </div>
+            <div class="cm-cell">
+              <div class="cm-title">True Positives (TP)</div>
+              <div class="cm-count cm-tp" id="cm-tp">--</div>
+              <div class="stat-desc" style="color: var(--text-muted);">Correctly Likely</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div>Student Placement Prediction System with MLOps &bull; Agile ASD & DevOps Lab</div>
+      <div class="footer-links">
+        <a href="/health" target="_blank" class="footer-link">GET /health</a>
+        <a href="/api/metrics" target="_blank" class="footer-link">GET /api/metrics</a>
+        <a href="/api/model-info" target="_blank" class="footer-link">GET /api/model-info</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

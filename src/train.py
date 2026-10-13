@@ -50,6 +50,12 @@ def train_model(
     save_dataset_if_not_exists(data_path)
 
     df = pd.read_csv(data_path)
+    # Support both column naming conventions seamlessly
+    rename_map = {
+        "internship_exp": "internships",
+        "projects_completed": "projects",
+    }
+    df = df.rename(columns=rename_map)
     logger.info(f"Loaded dataset: {len(df)} samples, features: {FEATURE_COLUMNS}")
 
     X = df[FEATURE_COLUMNS]

@@ -1,0 +1,102 @@
+# ==============================================================================
+# Environment Variables & Secrets
+# ==============================================================================
+.env
+.env.*
+!.env.example
+*.env
+*.secret
+*.pem
+*.key
+*.cert
+credentials.json
+client_secrets.json
+
+# ==============================================================================
+# Python Virtual Environments
+# ==============================================================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.virtualenv/
+pip-wheel-metadata/
+
+# ==============================================================================
+# Python Bytecode, Compilations & Caches
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.mypy_cache/
+.ruff_cache/
+.cache/
+.ipynb_checkpoints/
+
+# ==============================================================================
+# Testing, Coverage & QA
+# ==============================================================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.tox/
+.nox/
+
+# ==============================================================================
+# Logs & Runtime Execution Artifacts
+# ==============================================================================
+logs/*
+!logs/.gitkeep
+*.log
+
+# ==============================================================================
+# Local Sensitive Datasets & Databases (Protect Student PII)
+# ==============================================================================
+data/sensitive/
+data/private/
+*.sqlite
+*.sqlite3
+*.db
+*.parquet
+*.xlsx
+*.xls
+
+# ==============================================================================
+# IDE, Editors & Operating System Files
+# ==============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.temp
