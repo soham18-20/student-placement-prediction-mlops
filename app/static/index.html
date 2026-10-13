@@ -7,12 +7,12 @@
   <meta name="description" content="Minimalist, responsive student campus placement prediction analytics dashboard with scikit-learn pipeline, Flask REST API, baseline comparisons, and MLOps observability." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/css/minimalist.css" />
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
+    <!-- Header Navigation -->
     <header class="app-header">
       <div class="brand-wrapper">
         <div class="brand-icon">🎓</div>
@@ -29,6 +29,17 @@
         <span id="api-status-text">API: Checking...</span>
       </div>
     </header>
+
+    <!-- Clear Introduction Card -->
+    <section class="intro-section" aria-label="Tool Introduction">
+      <div class="intro-card">
+        <h2 class="intro-title">Placement Likelihood & Academic Analytics</h2>
+        <p class="intro-description">
+          An enterprise-grade predictive analytics platform powered by a reproducible scikit-learn pipeline and Flask REST service.
+          Evaluate student academic standing, technical competence, and practical portfolio experience to predict campus recruitment odds with calibrated confidence.
+        </p>
+      </div>
+    </section>
 
     <!-- Synthetic Demo Mode Disclosure Banner -->
     <div class="demo-banner" id="demo-banner">
@@ -65,13 +76,32 @@
 
         <form id="prediction-form" novalidate>
           <div class="form-grid">
+            <!-- Section 1: Academic Standing -->
+            <div class="form-section-divider">
+              <span>Section 1: Academic Standing</span>
+            </div>
+
             <!-- 1. CGPA -->
             <div class="form-group">
               <div class="label-row">
-                <label for="cgpa">CGPA</label>
+                <label for="cgpa">Cumulative GPA (CGPA)</label>
                 <span class="input-hint">0.0 – 10.0</span>
               </div>
               <input type="number" id="cgpa" class="input-field" step="0.01" min="0" max="10" placeholder="e.g. 8.2" required value="8.2" />
+            </div>
+
+            <!-- 7. Attendance Percentage -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="attendance">Attendance Percentage</label>
+                <span class="input-hint">0 – 100%</span>
+              </div>
+              <input type="number" id="attendance" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 88.0" required value="88.0" />
+            </div>
+
+            <!-- Section 2: Technical & Cognitive Skills -->
+            <div class="form-section-divider">
+              <span>Section 2: Technical & Cognitive Skills</span>
             </div>
 
             <!-- 2. Technical Score -->
@@ -90,6 +120,11 @@
                 <span class="input-hint">0 – 100</span>
               </div>
               <input type="number" id="aptitude_score" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 75.0" required value="75.0" />
+            </div>
+
+            <!-- Section 3: Professional & Practical Experience -->
+            <div class="form-section-divider">
+              <span>Section 3: Professional & Practical Experience</span>
             </div>
 
             <!-- 4. Communication Score -->
@@ -115,21 +150,12 @@
             </div>
 
             <!-- 6. Projects Completed -->
-            <div class="form-group">
+            <div class="form-group form-group-full">
               <div class="label-row">
                 <label for="projects_completed">Projects Completed</label>
                 <span class="input-hint">Integer &ge; 0</span>
               </div>
               <input type="number" id="projects_completed" class="input-field" min="0" max="50" step="1" placeholder="e.g. 3" required value="3" />
-            </div>
-
-            <!-- 7. Attendance Percentage -->
-            <div class="form-group form-group-full">
-              <div class="label-row">
-                <label for="attendance">Attendance Percentage</label>
-                <span class="input-hint">0 – 100%</span>
-              </div>
-              <input type="number" id="attendance" class="input-field" step="0.5" min="0" max="100" placeholder="e.g. 88.0" required value="88.0" />
             </div>
           </div>
 
@@ -153,7 +179,7 @@
         <div class="result-placeholder" id="result-placeholder">
           <div class="placeholder-icon">⚡</div>
           <p><strong>Awaiting Analysis</strong></p>
-          <p style="font-size: 13px; margin-top: 4px;">Adjust parameters or choose a preset and submit the form to see placement predictions.</p>
+          <p style="font-size: 13px; margin-top: 4px; color: var(--text-muted);">Adjust parameters or choose a preset and submit the form to see placement predictions.</p>
         </div>
 
         <!-- Populated Prediction Result -->
